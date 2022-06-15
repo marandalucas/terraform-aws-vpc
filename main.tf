@@ -28,6 +28,7 @@ resource "aws_vpc" "this" {
   tags = merge(
     { "Name" = var.name },
     var.tags,
+    var.vpc_tags,
   )
 }
 
@@ -62,6 +63,7 @@ resource "aws_subnet" "public" {
       )
     },
     var.tags,
+    var.public_subnet_tags,
   )
 }
 
@@ -85,6 +87,7 @@ resource "aws_subnet" "private" {
       )
     },
     var.tags,
+    var.private_subnet_tags,
   )
 }
 
@@ -100,6 +103,7 @@ resource "aws_internet_gateway" "this" {
   tags = merge(
     { "Name" = var.name },
     var.tags,
+    var.igw_tags,
   )
 }
 
@@ -111,6 +115,7 @@ resource "aws_egress_only_internet_gateway" "this" {
   tags = merge(
     { "Name" = var.name },
     var.tags,
+    var.igw_tags,
   )
 }
 
@@ -126,6 +131,7 @@ resource "aws_route_table" "public" {
   tags = merge(
     { "Name" = "${var.name}-${var.public_subnet_suffix}" },
     var.tags,
+    var.public_route_table_tags,
   )
 }
 
@@ -159,6 +165,7 @@ resource "aws_route_table" "private" {
       )
     },
     var.tags,
+    var.private_route_table_tags,
   )
 }
 
@@ -179,6 +186,7 @@ resource "aws_eip" "nat" {
       )
     },
     var.tags,
+    var.nat_eip_tags,
   )
 }
 
@@ -202,6 +210,7 @@ resource "aws_nat_gateway" "this" {
       )
     },
     var.tags,
+    var.nat_gateway_tags,
   )
 
   depends_on = [aws_internet_gateway.this]

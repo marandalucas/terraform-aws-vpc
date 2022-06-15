@@ -1,5 +1,5 @@
 terraform {
-  source = "github.com/marandalucas/terraform-aws-vpc.git//.?ref=v0.1.0"
+  source = "github.com/marandalucas/terraform-aws-vpc.git//.?ref=v0.2.0"
 }
 
 include {
@@ -9,8 +9,16 @@ include {
 }
 
 locals {
-  purpose = "k8s"
-  name    = format("%s-%s-%s-%s-vpc-%s", include.locals.area_code, include.locals.account_name, include.locals.environment_name, include.locals.region_name, local.purpose)
+  purpose = "fargate"
+  name    = format("%s-%s-%s-%s-vpc-%s", include.locals.area_code, include.locals.account_name, include.locals.environment_short_name, include.locals.region_name, local.purpose)
+
+  tags = {
+    Terraform   = "true"
+    Area        = include.locals.area_code
+    Account     = include.locals.account_name
+    Environment = include.locals.environment_name
+    Region      = include.locals.region_name
+  }
 }
 inputs = {
 
@@ -42,12 +50,5 @@ inputs = {
   enable_dns_support   = true
   enable_dns_hostnames = false
 
-
-  tags = {
-    Terraform   = "true"
-    Area        = include.locals.area_code
-    Account     = include.locals.account_name
-    Environment = include.locals.environment_name
-    Region      = include.locals.region_name
-  }
+  tags = local.tags
 }
